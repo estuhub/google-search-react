@@ -1,63 +1,73 @@
-// import react
 import React from "react";
 
-// create component
-class Results extends React.Component{
-	state = {
-		input: '',
-		results: [{
-			title: 'JavaScript',
-			description: 'Well organized and easy to understand Web building tutorials with lots of examples of how to use HTML, CSS, JavaScript, SQL, PHP, Python, Bootstrap, Java',
-			url: 'www.W3Schools.com',
-			links: [
-				{
-				title: 'JavaScript Introduction',
-				url: '#'
-			}, {
-				title: 'JavaScript Functions',
-				url: '#'
-			}, {
-				title: 'JavaScript Examples',
-				url: '#'
-			}]}
-		],
-		input2: ''
-	}
-	changeInput(typed) {
-		this.setState ({
-			input: typed.target.value
-		})
-	}
+class Results extends React.Component {
+  constructor(props) {
+    super(props); // what is this
+    var stateData = [
+      {
+        ID: 1,
+        input: "",
+      },
+    ]
+    this.state = {
+      data: stateData,
+			results: [{
+				title: 'JavaScript',
+				description: 'Well organized and easy to understand Web building tutorials with lots of examples of how to use HTML, CSS, JavaScript, SQL, PHP, Python, Bootstrap, Java',
+				url: 'www.W3Schools.com',
+				links: [
+					{
+					title: 'JavaScript Introduction',
+					url: '#'
+				}, {
+					title: 'JavaScript Functions',
+					url: '#'
+				}, {
+					title: 'JavaScript Examples',
+					url: '#'
+				}]}
+			]
+    }
+  }
+  handleInputChange = e => {
+    const stateDataCopy = this.state.data.slice()
+    const objectCopy = Object.assign({}, stateDataCopy[e.target.dataset.index])
+    objectCopy["input"] = e.target.value
+    stateDataCopy[e.target.dataset.index] = objectCopy
+    this.setState({ data: stateDataCopy })
+    console.log(this.state.data)
+  }
 	submitSearch(form) {
-		console.log(this.state.input)
+		console.log(this.state.data[0].input)
+		let data = this.state.data
+		data[0].input = ''
+		console.log(data);
 		form.preventDefault()
 		this.setState({
-			input: ''
+			data
 		})
 	}
-	render() {
-		return (
+  render() {
+    return (
 			<div>
 		    <div className="header">
 		      <img className="logo" src="google.png" />
-					{/* search form */}
-					{/* to do
-	PART 1
-// link form through onSubmit to call a method
-// overrideDefault (something like that)
-use the form to change states
-Test it all works
-	PART 2
-// make form input value update the state onKeyUp
-make form submit reset input value
-	BONUS
-make input value and state linked/looped and working
-					*/}
-		      <form onSubmit={e => this.submitSearch(e)}>
-		        <input type="text" onKeyUp={e => this.changeInput(e)} autoFocus />
-		        <button className="primary">Search</button>
+			    <form onSubmit={e => this.submitSearch(e)}>
+						{this.state.data.map((d, index) => (
+						<input
+							key={d.ID} // ID in stateData
+							data-index={index} //index generated here
+							name={d.Name}
+							type="text"
+							className="form-control"
+							value={this.state.data[index]["input"]} //links to stateData Object
+							onChange={this.handleInputChange}
+						/>
+						))}
+			       <button className="primary">Search</button>
 		      </form>
 		    </div>
+				{/* results count */}
 		    <div className="small">
 		      <small>{this.state.results.length} Result{this.state.results.length !== 1 ? 's' : ''}</small>
 		    </div>
@@ -82,9 +92,8 @@ pass relevant data to the child Result.js
 					</section>
 					)}
 			</div>
-		)
-	}
+    );
+  }
 }
 
-// export react
-export default Results;
+export default Results
