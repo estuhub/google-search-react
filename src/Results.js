@@ -20,11 +20,19 @@ class Results extends React.Component{
 				title: 'JavaScript Examples',
 				url: '#'
 			}]}
-		]
+		],
+		input2: ''
 	}
 	changeInput(typed) {
 		this.setState ({
 			input: typed.target.value
+		})
+	}
+	submitSearch(form) {
+		console.log(this.state.input)
+		form.preventDefault()
+		this.setState({
+			input: ''
 		})
 	}
 	render() {
@@ -35,17 +43,17 @@ class Results extends React.Component{
 					{/* search form */}
 					{/* to do
 	PART 1
-link form through onSubmit to call a method
-overrideDefault (something like that)
+// link form through onSubmit to call a method
+// overrideDefault (something like that)
 use the form to change states
 Test it all works
 	PART 2
-make form input value update the state onKeyUp
+// make form input value update the state onKeyUp
 make form submit reset input value
 	BONUS
 make input value and state linked/looped and working
 					*/}
-		      <form>
+		      <form onSubmit={e => this.submitSearch(e)}>
 		        <input type="text" onKeyUp={e => this.changeInput(e)} autoFocus />
 		        <button className="primary">Search</button>
 		      </form>
@@ -68,7 +76,7 @@ pass relevant data to the child Result.js
 		      <p>{result.description}</p>
 		      <ul>
 						{result.links.map((link, i) =>
-						<li key="{i}"><a href={link.url}>{link.title}</a></li>
+						<li key={i}><a href={link.url}>{link.title}</a></li>
 					)}
 		      </ul>
 					</section>
